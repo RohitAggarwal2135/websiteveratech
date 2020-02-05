@@ -130,13 +130,13 @@ class BlogsController extends Controller
         $json_author_names = [];
         $query = $request->get('phrase');
         if ($query != '') {
-            $data = DB::table('people')
-                ->where('first_name', 'like', '%' . $query . '%')
-                ->select('first_name')
+            $data = DB::table(DBValues::DB_TABLE_NAME_PEOPLE)
+                ->where(DBValues::DB_TABLE_PEOPLE_FIRST_NAME, DBValues::DB_OPERATOR_LIKE, DBValues::DB_OPERATOR_LIKE_PERCENTAGE . $query . DBValues::DB_OPERATOR_LIKE_PERCENTAGE)
+                ->select(DBValues::DB_TABLE_PEOPLE_FIRST_NAME)
                 ->get();
         } else {
-            $data = DB::table('people')
-                ->select('first_name')
+            $data = DB::table(DBValues::DB_TABLE_NAME_PEOPLE)
+                ->select(DBValues::DB_TABLE_PEOPLE_FIRST_NAME)
                 ->get();
         }
 
