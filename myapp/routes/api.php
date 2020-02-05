@@ -24,4 +24,4 @@ Route::post('populateblog', 'BlogsController@populate_blog');
 
 Route::get('searchblog', 'BlogsController@live_blog_search');
 
-Route::get('getauthors', 'BlogsController@get_authors');
+Route::post('getauthors', 'BlogsController@get_authors');

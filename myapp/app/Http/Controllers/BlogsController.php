@@ -76,21 +76,23 @@ class BlogsController extends Controller
 
     public function live_blog_search(Request $request)
     {
-//        print_r($request->all());
         $output = '';
         $query = $request->get('query');
         if ($query != '') {
             $data = DB::table(DBValues::DB_TABLE_NAME_BLOG)
-                ->where(DBValues::DB_TABLE_BLOG_TITLE, DBValues::DB_OPERATOR_LIKE, DBValues::DB_OPERATOR_LIKE_PERCENTAGE . $query . DBValues::DB_OPERATOR_LIKE_PERCENTAGE)
-                ->orwhere(DBValues::DB_TABLE_BLOG_AUTHOR, DBValues::DB_OPERATOR_LIKE, DBValues::DB_OPERATOR_LIKE_PERCENTAGE . $query . DBValues::DB_OPERATOR_LIKE_PERCENTAGE)
-                ->orWhere(DBValues::DB_TABLE_BLOG_CONTENT, DBValues::DB_OPERATOR_LIKE, DBValues::DB_OPERATOR_LIKE_PERCENTAGE . $query . DBValues::DB_OPERATOR_LIKE_PERCENTAGE)
-                ->orWhere(DBValues::DB_TABLE_BLOG_CATEGORY, DBValues::DB_OPERATOR_LIKE, DBValues::DB_OPERATOR_LIKE_PERCENTAGE . $query . DBValues::DB_OPERATOR_LIKE_PERCENTAGE)
-                ->orWhere(DBValues::DB_TABLE_BLOG_TAGS, DBValues::DB_OPERATOR_LIKE, DBValues::DB_OPERATOR_LIKE_PERCENTAGE . $query . DBValues::DB_OPERATOR_LIKE_PERCENTAGE)
-                ->orderBy(DBValues::DB_TABLE_BLOG_LAST_UPDATED_TIME, DBValues::DB_OPERATOR_DECREASING_ORDER)
-                ->get();
+                    ->join(DBValues::DB_TABLE_NAME_PEOPLE,DBValues::DB_TABLE_NAME_BLOG . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_BLOG_AUTHOR, DBValues::DB_OPERATOR_EQUAL_TO, DBValues::DB_TABLE_NAME_PEOPLE . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_PEOPLE_UID)
+                    ->where(DBValues::DB_TABLE_NAME_BLOG . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_BLOG_TITLE, DBValues::DB_OPERATOR_LIKE, DBValues::DB_OPERATOR_LIKE_PERCENTAGE . $query . DBValues::DB_OPERATOR_LIKE_PERCENTAGE)
+                    ->orWhere(DBValues::DB_TABLE_NAME_PEOPLE . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_PEOPLE_FIRST_NAME, DBValues::DB_OPERATOR_LIKE, DBValues::DB_OPERATOR_LIKE_PERCENTAGE . $query . DBValues::DB_OPERATOR_LIKE_PERCENTAGE)
+                    ->orWhere(DBValues::DB_TABLE_NAME_BLOG . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_BLOG_CATEGORY, DBValues::DB_OPERATOR_LIKE, DBValues::DB_OPERATOR_LIKE_PERCENTAGE . $query . DBValues::DB_OPERATOR_LIKE_PERCENTAGE)
+                    ->orWhere(DBValues::DB_TABLE_NAME_BLOG . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_BLOG_TAGS, DBValues::DB_OPERATOR_LIKE, DBValues::DB_OPERATOR_LIKE_PERCENTAGE . $query . DBValues::DB_OPERATOR_LIKE_PERCENTAGE)
+                    ->orderBy(DBValues::DB_TABLE_NAME_BLOG . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_BLOG_LAST_UPDATED_TIME, DBValues::DB_OPERATOR_DECREASING_ORDER)
+                    ->select(DBValues::DB_TABLE_NAME_BLOG . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_BLOG_UID, DBValues::DB_TABLE_NAME_BLOG . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_BLOG_TITLE, DBValues::DB_TABLE_NAME_BLOG . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_BLOG_CONTENT, DBValues::DB_TABLE_NAME_BLOG . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_BLOG_CATEGORY, DBValues::DB_TABLE_NAME_BLOG . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_BLOG_TAGS, DBValues::DB_TABLE_NAME_PEOPLE . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_PEOPLE_FIRST_NAME)
+                    ->get();
         } else {
             $data = DB::table(DBValues::DB_TABLE_NAME_BLOG)
-                ->orderBy(DBValues::DB_TABLE_BLOG_LAST_UPDATED_TIME, DBValues::DB_OPERATOR_DECREASING_ORDER)
+                ->join(DBValues::DB_TABLE_NAME_PEOPLE,DBValues::DB_TABLE_NAME_BLOG . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_BLOG_AUTHOR, DBValues::DB_OPERATOR_EQUAL_TO, DBValues::DB_TABLE_NAME_PEOPLE . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_PEOPLE_UID)
+                ->orderBy(DBValues::DB_TABLE_NAME_BLOG . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_BLOG_LAST_UPDATED_TIME, DBValues::DB_OPERATOR_DECREASING_ORDER)
+                ->select(DBValues::DB_TABLE_NAME_BLOG . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_BLOG_UID, DBValues::DB_TABLE_NAME_BLOG . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_BLOG_TITLE, DBValues::DB_TABLE_NAME_BLOG . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_BLOG_CONTENT, DBValues::DB_TABLE_NAME_BLOG . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_BLOG_CATEGORY, DBValues::DB_TABLE_NAME_BLOG . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_BLOG_TAGS, DBValues::DB_TABLE_NAME_PEOPLE . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_PEOPLE_FIRST_NAME)
                 ->get();
         }
         $total_row = $data->count();
@@ -98,12 +100,12 @@ class BlogsController extends Controller
             foreach ($data as $row) {
                 $output .= "
                     <tr>
-                        <td>'$row->uid'</td>
-                        <td>'$row->title'</td>
-                        <td>'$row->content'</td>
-                        <td>'$row->author_name'</td>
-                        <td>'$row->category'</td>
-                        <td>'$row->tags'</td>
+                        <td>$row->uid</td>
+                        <td>$row->title</td>
+                        <td>$row->content</td>
+                        <td>$row->first_name</td>
+                        <td>$row->category</td>
+                        <td>$row->tags</td>
                     </tr>
                             ";
             }
@@ -120,12 +122,13 @@ class BlogsController extends Controller
         );
 
         echo json_encode($data);
-//        return response()->json($data)->header(ConstantValues::HEADER_NAME_CORS, ConstantValues::HEADER_VALUE_ALL_OPERATOR);
     }
+
 
     public function get_authors(Request $request)
     {
-        $query = $request->get('query');
+        $json_author_names = [];
+        $query = $request->get('phrase');
         if ($query != '') {
             $data = DB::table('people')
                 ->where('first_name', 'like', '%' . $query . '%')
@@ -133,14 +136,17 @@ class BlogsController extends Controller
                 ->get();
         } else {
             $data = DB::table('people')
+                ->select('first_name')
                 ->get();
         }
-//        print_r($data->count());
-        echo json_encode($data);
 
+        for($index = 0; $index < count($data); $index++){
+            $json_author_names[$index] = $data[$index];
+        }
+
+        return json_encode($json_author_names);
     }
 }
-
 
 
 
