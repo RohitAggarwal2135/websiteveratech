@@ -35,13 +35,14 @@ class DBValues
     const DB_TABLE_MEDIA_URL_BACKGROUND_PIC = "url_bg_pic";
     const DB_TABLE_MEDIA_URL_PDF = "url_pdf";
     const DB_TABLE_MEDIA_TAGS = "tags";
+    const DB_TABLE_MEDIA_CATEGORY = "category";
     const DB_TABLE_MEDIA_PRIORITY = "priority";
     const DB_TABLE_MEDIA_PUBLISHED_ON_DATE = "published_on_date";
     const DB_TABLE_MEDIA_LAST_UPDATED_TIME = "last_updated_time";
 
 
     /*
-     * DATABASE VALUES STORED AS CONSTANTS '''''  MEDIA TABLE  '''''
+     * DATABASE VALUES STORED AS CONSTANTS '''''  PEOPLE TABLE  '''''
      */
     const DB_TABLE_NAME_PEOPLE = "people";
     const DB_TABLE_PEOPLE_UID = "uid";

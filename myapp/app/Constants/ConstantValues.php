@@ -10,6 +10,9 @@ class ConstantValues
     const FIELD_NAME_ID = "id";
     const FIELD_NAME_LIMIT = "limit";
     const FIELD_NAME_OFFSET = "offset";
+    const FIELD_NAME_FIRST_NAME = "first_name";
+    const FIELD_NAME_ORGANISATION = "organisation";
+    const FIELD_NAME_UID = "uid";
 
     /*
      * CONSTANT "HELPER VALUES" USED ACROSS THE WEBSITE

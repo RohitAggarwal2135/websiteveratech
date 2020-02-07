@@ -25,6 +25,7 @@ class SuggestedRequest extends FormRequest
     public function rules()
     {
         return [
+            ConstantValues::FIELD_NAME_LIMIT => ConstantValues::FIELD_NAME_REQUIRED,
             ConstantValues::FIELD_NAME_ID => ConstantValues::FIELD_NAME_REQUIRED,
         ];
     }
@@ -32,6 +33,7 @@ class SuggestedRequest extends FormRequest
     public function messages()
     {
         return [
+            ConstantValues::FIELD_NAME_LIMIT . ConstantValues::FIELD_NAME_OPERATOR_DOT . ConstantValues::FIELD_NAME_REQUIRED => ConstantValues::FIELD_NAME_LIMIT_IS_MISSING,
             ConstantValues::FIELD_NAME_ID . ConstantValues::FIELD_NAME_OPERATOR_DOT . ConstantValues::FIELD_NAME_REQUIRED => ConstantValues::FIELD_NAME_ID_IS_MISSING,
         ];
     }

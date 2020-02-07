@@ -6,15 +6,33 @@ Route::resource('blog', 'PostsController');
 
 Route::get('gettopblog', 'BlogsController@top_story');
 
+Route::get('gettopstory', 'MediaController@top_story');
+
 Route::get('categories', 'BlogsController@categories');
 
 Route::post('suggestedblog', 'BlogsController@suggested_blog');
 
+Route::post('suggestedstory', 'MediaController@suggested_story');
+
+Route::post('uniqueblog', 'BlogsController@unique_blog');
+
+Route::post('uniquestory', 'MediaController@unique_media');
+
 Route::post('allblogs', 'BlogsController@all_blogs_paginated');
 
-Route::get('gettopmedia', 'MediaController@top_story');
+Route::post('allstories', 'MediaController@all_media_paginated');
 
-Route::post('allmedia', 'MediaController@all_media_paginated');
+Route::post('getblogforcategory', 'BlogsController@get_blog_for_category');
+
+Route::post('getstoryforcategory', 'MediaController@get_story_for_category');
+
+Route::post('getblogforauthor', 'BlogsController@get_blog_for_author');
+
+Route::post('getstoryforauthor', 'MediaController@get_story_for_author');
+
+
+
+
 
 Route::get('posts', 'BlogsController@index');
 
@@ -25,3 +43,9 @@ Route::post('populateblog', 'BlogsController@populate_blog');
 Route::get('searchblog', 'BlogsController@live_blog_search');
 
 Route::post('getauthors', 'BlogsController@get_authors');
+
+Route::post('getorganization', 'BlogsController@get_organization');
+
+Route::post('peopleadd', 'PeoplesController@add_people');
+
+Route::post('populatepeople', 'PeoplesController@populate_people');
