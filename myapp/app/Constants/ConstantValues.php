@@ -7,12 +7,18 @@ class ConstantValues
     /*
      * CONSTANT "VALUES" USED ACROSS THE WEBSITE
      */
+    const FIELD_NAME_LIMIT_RANGE = "1,10";
     const FIELD_NAME_ID = "id";
     const FIELD_NAME_LIMIT = "limit";
     const FIELD_NAME_OFFSET = "offset";
     const FIELD_NAME_FIRST_NAME = "first_name";
+    const FIELD_NAME_NAME = "name";
     const FIELD_NAME_ORGANISATION = "organisation";
     const FIELD_NAME_UID = "uid";
+    const FIELD_NAME_CATEGORY = "category";
+    const FIELD_NAME_AUTHOR = "author";
+    const FIELD_NAME_TITLE = "title";
+    const FIELD_NAME_AUTHOR_NAME = "authorName";
 
     /*
      * CONSTANT "HELPER VALUES" USED ACROSS THE WEBSITE

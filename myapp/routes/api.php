@@ -2,7 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::get('posts', 'BlogsController@index');
+
 Route::resource('blog', 'PostsController');
+
+
+//APIs
 
 Route::get('gettopblog', 'BlogsController@top_story');
 
@@ -30,11 +35,16 @@ Route::post('getblogforauthor', 'BlogsController@get_blog_for_author');
 
 Route::post('getstoryforauthor', 'MediaController@get_story_for_author');
 
+//Route::post('getblogfortags', 'MediaController@get_blog_for_tags');
+//
+//Route::post('getstoryfortags', 'MediaController@get_story_for_tags');
+//
+//Route::post('getblogfororganisation', 'MediaController@get_blog_for_organisation');
+//
+//Route::post('getstoryfororganisation', 'MediaController@get_story_for_organisation');
 
 
-
-
-Route::get('posts', 'BlogsController@index');
+//BLOG CRUD AND FUNCTIONALITY
 
 Route::post('postadd', 'BlogsController@postsadd');
 
@@ -44,8 +54,12 @@ Route::get('searchblog', 'BlogsController@live_blog_search');
 
 Route::post('getauthors', 'BlogsController@get_authors');
 
-Route::post('getorganization', 'BlogsController@get_organization');
+Route::post('getorganization', 'PeoplesController@get_organization');
 
 Route::post('peopleadd', 'PeoplesController@add_people');
 
 Route::post('populatepeople', 'PeoplesController@populate_people');
+
+Route::post('organisationadd', 'OrganisationsController@add_organisation');
+
+Route::post('populateorganisation', 'OrganisationsController@populate_organisation');
