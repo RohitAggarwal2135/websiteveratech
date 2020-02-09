@@ -44,4 +44,9 @@ class MediaCalls
     {
         return response()->json(DB::table(DBValues::DB_TABLE_NAME_MEDIA)->where(DBValues::DB_TABLE_MEDIA_AUTHOR_NAME, DBValues::DB_OPERATOR_EQUAL_TO, $author_name)->select([DBValues::DB_OPERATOR_SELECT_ALL])->limit($limit)->offset($offset)->get());
     }
+
+    public function get_story_for_tag_paginated($tag, $limit, $offset)
+    {
+        return response()->json(DB::table(DBValues::DB_TABLE_NAME_MEDIA)->where(DBValues::DB_TABLE_MEDIA_TAGS, DBValues::DB_OPERATOR_LIKE, DBValues::DB_OPERATOR_LIKE_PERCENTAGE . $tag . DBValues::DB_OPERATOR_LIKE_PERCENTAGE)->select([DBValues::DB_OPERATOR_SELECT_ALL])->limit($limit)->offset($offset)->get());
+    }
 }

@@ -3,10 +3,10 @@
 namespace App\Services\Organisation;
 header("Access-Control-Allow-Origin : *");
 
+use App\Constants\ConstantValues;
 use App\Constants\DBValues;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Illuminate\Support\MessageBag;
 
 class OrganisationCalls
 {
@@ -14,30 +14,38 @@ class OrganisationCalls
     {
         $organisation_json = json_decode($json);
         if ($organisation_json->{'uid'}) {
-            $insert = DB::table('organization')
-                ->where('uid', DBValues::DB_OPERATOR_EQUAL_TO, $organisation_json->{'uid'})
-                ->update(['name' => $organisation_json->{'name'}, 'description' => $organisation_json{'description'}, 'url_website' => $organisation_json->{'url_website'}, 'category' => $organisation_json->{'category'}, 'url_linkedin' => $organisation_json->{'url_linkedin'}, 'url_github' => $organisation_json->{'url_github'}, 'url_facebook' => $organisation_json->{'url_facebook'}, 'url_twitter' => $organisation_json->{'url_twitter'}, 'url_logo_color' => $organisation_json->{'url_logo_color'}, 'url_logo_bw' => $organisation_json->{'url_logo_bw'}]);
+            $insert = DB::table(DBValues::DB_TABLE_NAME_ORGANIZATION)
+                ->where(DBValues::DB_TABLE_ORGANIZATION_UID, DBValues::DB_OPERATOR_EQUAL_TO, $organisation_json->{'uid'})
+                ->update([DBValues::DB_TABLE_ORGANIZATION_NAME => $organisation_json->{'name'}, DBValues::DB_TABLE_ORGANIZATION_DESCRIPTION => $organisation_json->{'description'}, DBValues::DB_TABLE_ORGANIZATION_URL_WEBSITE => $organisation_json->{'url_website'}, DBValues::DB_TABLE_ORGANIZATION_CATEGORY => $organisation_json->{'category'}, DBValues::DB_TABLE_ORGANIZATION_URL_LINKEDIN => $organisation_json->{'url_linkedin'}, DBValues::DB_TABLE_ORGANIZATION_URL_GITHUB => $organisation_json->{'url_github'}, DBValues::DB_TABLE_ORGANIZATION_URL_FACEBOOK => $organisation_json->{'url_facebook'}, DBValues::DB_TABLE_ORGANIZATION_URL_TWITTER => $organisation_json->{'url_twitter'}, DBValues::DB_TABLE_ORGANIZATION_URL_LOGO_COLOR => $organisation_json->{'url_logo_color'}, DBValues::DB_TABLE_ORGANIZATION_LOGO_BW => $organisation_json->{'url_logo_bw'}]);
+
+            $insert_default_people = DB::table(DBValues::DB_TABLE_NAME_PEOPLE)
+                ->where(DBValues::DB_TABLE_PEOPLE_ORGANISATION_ID, DBValues::DB_OPERATOR_EQUAL_TO, $organisation_json->{'uid'})
+                ->update([DBValues::DB_TABLE_PEOPLE_FIRST_NAME => $organisation_json->{'name'}, DBValues::DB_TABLE_PEOPLE_ORGANISATION_ID => $organisation_json->{'uid'}, DBValues::DB_TABLE_PEOPLE_DESIGNATION => ConstantValues::FIELD_NAME_DEFAULT_USER_DESIGNATION, DBValues::DB_TABLE_PEOPLE_ABOUT => $organisation_json->{'description'}, DBValues::DB_TABLE_PEOPLE_URL_LINKEDIN => $organisation_json->{'url_linkedin'}, DBValues::DB_TABLE_PEOPLE_URL_FACEBOOK => $organisation_json->{'url_facebook'}, DBValues::DB_TABLE_PEOPLE_URL_TWITTER => $organisation_json->{'url_twitter'}, DBValues::DB_TABLE_PEOPLE_URL_GITHUB => $organisation_json->{'url_github'}, DBValues::DB_TABLE_PEOPLE_CATEGORY => $organisation_json->{'category'}, DBValues::DB_TABLE_PEOPLE_URL_PROFILE_PIC => $organisation_json->{'url_logo_color'}]);
         } else {
-            $insert = DB::table('organization')
-                ->insert(['uid' => Str::random(10), 'name' => $organisation_json->{'name'}, 'description' => $organisation_json->{'description'}, 'url_website' => $organisation_json->{'url_website'}, 'category' => $organisation_json->{'category'}, 'url_linkedin' => $organisation_json->{'url_linkedin'}, 'url_github' => $organisation_json->{'url_github'}, 'url_facebook' => $organisation_json->{'url_facebook'}, 'url_twitter' => $organisation_json->{'url_twitter'}, 'url_logo_color' => $organisation_json->{'url_logo_color'}, 'url_logo_bw' => $organisation_json->{'url_logo_bw'}]);
+            $random_organisation_uid = Str::random(10);
+            $insert = DB::table(DBValues::DB_TABLE_NAME_ORGANIZATION)
+                ->insert([DBValues::DB_TABLE_ORGANIZATION_UID => $random_organisation_uid, DBValues::DB_TABLE_ORGANIZATION_NAME => $organisation_json->{'name'}, DBValues::DB_TABLE_ORGANIZATION_DESCRIPTION => $organisation_json->{'description'}, DBValues::DB_TABLE_ORGANIZATION_URL_WEBSITE => $organisation_json->{'url_website'}, DBValues::DB_TABLE_ORGANIZATION_CATEGORY => $organisation_json->{'category'}, DBValues::DB_TABLE_ORGANIZATION_URL_LINKEDIN => $organisation_json->{'url_linkedin'}, DBValues::DB_TABLE_ORGANIZATION_URL_GITHUB => $organisation_json->{'url_github'}, DBValues::DB_TABLE_ORGANIZATION_URL_FACEBOOK => $organisation_json->{'url_facebook'}, DBValues::DB_TABLE_ORGANIZATION_URL_TWITTER => $organisation_json->{'url_twitter'}, DBValues::DB_TABLE_ORGANIZATION_URL_LOGO_COLOR => $organisation_json->{'url_logo_color'}, DBValues::DB_TABLE_ORGANIZATION_LOGO_BW => $organisation_json->{'url_logo_bw'}]);
+
+            $insert_default_people = DB::table(DBValues::DB_TABLE_NAME_PEOPLE)
+                ->insert([DBValues::DB_TABLE_PEOPLE_UID => Str::random(10),DBValues::DB_TABLE_PEOPLE_FIRST_NAME => $organisation_json->{'name'}, DBValues::DB_TABLE_PEOPLE_ORGANISATION_ID => $random_organisation_uid, DBValues::DB_TABLE_PEOPLE_DESIGNATION => ConstantValues::FIELD_NAME_DEFAULT_USER_DESIGNATION, DBValues::DB_TABLE_PEOPLE_ABOUT => $organisation_json->{'description'}, DBValues::DB_TABLE_PEOPLE_URL_LINKEDIN => $organisation_json->{'url_linkedin'}, DBValues::DB_TABLE_PEOPLE_URL_FACEBOOK => $organisation_json->{'url_facebook'}, DBValues::DB_TABLE_PEOPLE_URL_TWITTER => $organisation_json->{'url_twitter'}, DBValues::DB_TABLE_PEOPLE_URL_GITHUB => $organisation_json->{'url_github'}, DBValues::DB_TABLE_PEOPLE_CATEGORY => $organisation_json->{'category'}, DBValues::DB_TABLE_PEOPLE_URL_PROFILE_PIC => $organisation_json->{'url_logo_color'}]);
         }
-        if ($insert) {
-            return response()->json("SUCCESS", 200)->header("Access-Control-Allow-Origin", "*");
+        if ($insert && $insert_default_people) {
+            return response()->json("SUCCESS", 200)->header(ConstantValues::HEADER_NAME_CORS, ConstantValues::HEADER_VALUE_ALL_OPERATOR);
         } else {
-            return response()->json("FAILED", 500)->header("Access-Control-Allow-Origin", "*");
+            return response()->json("FAILED", 500)->header(ConstantValues::HEADER_NAME_CORS, ConstantValues::HEADER_VALUE_ALL_OPERATOR);
         }
     }
 
     public function organisation_populate($uid)
     {
-        $data_response = DB::table('organization')
-            ->where('uid', DBValues::DB_OPERATOR_EQUAL_TO, $uid)
+        $data_response = DB::table(DBValues::DB_TABLE_NAME_ORGANIZATION)
+            ->where(DBValues::DB_TABLE_ORGANIZATION_UID, DBValues::DB_OPERATOR_EQUAL_TO, $uid)
             ->select([DBValues::DB_OPERATOR_SELECT_ALL])
             ->get();
 
         if (count($data_response) == 0) {
-            return response()->json("Wrong uid")->header("Access-Control-Allow-Origin", "*");
+            return response()->json("Wrong uid")->header(ConstantValues::HEADER_NAME_CORS, ConstantValues::HEADER_VALUE_ALL_OPERATOR);
         }
-        return response()->json($data_response, 200)->header("Access-Control-Allow-Origin", "*");
+        return response()->json($data_response, 200)->header(ConstantValues::HEADER_NAME_CORS, ConstantValues::HEADER_VALUE_ALL_OPERATOR);
     }
 }

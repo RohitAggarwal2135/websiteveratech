@@ -24,7 +24,7 @@ class PeoplesController extends Controller
             $organisation_response_boolean = isset(json_decode(json_encode($validation_failed_response), true)['organisation']);
 
             if (!$first_name_response_boolean && $organisation_response_boolean) {
-//                print_r(get_class($validation_failed_response));
+//                print_r(get_class($validation_failed_resporganizationonse));
                 $validation_failed_response->add('first_name', $request->all()['first_name']);
             }
 
@@ -51,7 +51,7 @@ class PeoplesController extends Controller
         ]);
         if ($validator->fails()) {
             $validation_failed_response = $validator->messages();
-            return response()->json($validation_failed_response, 200)->header("Access-Control-Allow-Origin", "*");
+            return response()->json($validation_failed_response, 200)->header(ConstantValues::HEADER_NAME_CORS, ConstantValues::HEADER_VALUE_ALL_OPERATOR);
         }
 
         $uid_json = json_encode($request->all());

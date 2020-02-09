@@ -8,12 +8,13 @@ use App\Services\Organisation\OrganisationCalls;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\MessageBag;
 
 class OrganisationsController extends Controller
 {
     public function add_organisation(Request $request)
     {
-        //        Validation check for required fields.
+//        Validation check for required fields.
         $validator = Validator::make($request->all(), [
             ConstantValues::FIELD_NAME_NAME => ConstantValues::FIELD_NAME_REQUIRED,
             ConstantValues::FIELD_NAME_CATEGORY => ConstantValues::FIELD_NAME_REQUIRED
@@ -49,7 +50,7 @@ class OrganisationsController extends Controller
         ]);
         if ($validator->fails()) {
             $validation_failed_response = $validator->messages();
-            return response()->json($validation_failed_response, 200)->header("Access-Control-Allow-Origin", "*");
+            return response()->json($validation_failed_response, 200)->header(ConstantValues::HEADER_NAME_CORS, ConstantValues::HEADER_VALUE_ALL_OPERATOR);
         }
 
         $uid_json = json_encode($request->all());

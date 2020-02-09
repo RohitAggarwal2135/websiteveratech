@@ -130,6 +130,26 @@ class BlogsController extends Controller
         return $get_blog_for_author_paginated->get_blog_for_author_paginated($author_name, $limit, $offset);
     }
 
+    public function get_blog_for_tags(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            ConstantValues::FIELD_NAME_TAG => ConstantValues::FIELD_NAME_REQUIRED,
+            ConstantValues::FIELD_NAME_LIMIT => ConstantValues::FIELD_NAME_REQUIRED . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_INTEGER . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_BETWEEN . ConstantValues::FIELD_NAME_OPERATOR_COLON . ConstantValues::FIELD_NAME_LIMIT_RANGE,
+            ConstantValues::FIELD_NAME_OFFSET => ConstantValues::FIELD_NAME_REQUIRED . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_INTEGER,
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->messages(), 200);
+        }
+
+        $provided_data = $request->all();
+        $tag = $provided_data['tag'];
+        $limit = $provided_data['limit'];
+        $offset = $provided_data['offset'];
+
+        $get_blog_for_tag_paginated = new BlogCalls();
+        return $get_blog_for_tag_paginated->get_blog_for_tag_paginated($tag, $limit, $offset);
+    }
+
 
 //    BLOG CRUD AND FUNCTIONALITY
 

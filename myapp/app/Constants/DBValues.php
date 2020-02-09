@@ -65,6 +65,24 @@ class DBValues
 
 
     /*
+     * DATABASE VALUES STORED AS CONSTANTS '''''  ORGANIZATION TABLE  '''''
+     */
+    const DB_TABLE_NAME_ORGANIZATION = "organization";
+    const DB_TABLE_ORGANIZATION_UID = "uid";
+    const DB_TABLE_ORGANIZATION_NAME = "name";
+    const DB_TABLE_ORGANIZATION_DESCRIPTION = "description";
+    const DB_TABLE_ORGANIZATION_CATEGORY = "category";
+    const DB_TABLE_ORGANIZATION_URL_WEBSITE = "url_website";
+    const DB_TABLE_ORGANIZATION_URL_LINKEDIN = "url_linkedin";
+    const DB_TABLE_ORGANIZATION_URL_GITHUB = "url_github";
+    const DB_TABLE_ORGANIZATION_URL_FACEBOOK = "url_facebook";
+    const DB_TABLE_ORGANIZATION_URL_TWITTER = "url_twitter";
+    const DB_TABLE_ORGANIZATION_URL_LOGO_COLOR = "url_logo_color";
+    const DB_TABLE_ORGANIZATION_LOGO_BW = "url_logo_bw";
+    const DB_TABLE_ORGANIZATION_LAST_UPDATED_TIME = "last_updated_time";
+
+
+    /*
      * CONSTANT OPERATOR USED IN SQL SYNTAX
      */
     const DB_OPERATOR_SELECT_ALL = "*";

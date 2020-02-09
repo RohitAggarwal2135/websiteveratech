@@ -18,7 +18,8 @@ class ConstantValues
     const FIELD_NAME_CATEGORY = "category";
     const FIELD_NAME_AUTHOR = "author";
     const FIELD_NAME_TITLE = "title";
-    const FIELD_NAME_AUTHOR_NAME = "authorName";
+    const FIELD_NAME_TAG = "tag";
+    const FIELD_NAME_DEFAULT_USER_DESIGNATION = "COMPANY";
 
     /*
      * CONSTANT "HELPER VALUES" USED ACROSS THE WEBSITE

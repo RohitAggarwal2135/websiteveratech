@@ -56,8 +56,12 @@ class BlogCalls
         return response()->json(DB::table(DBValues::DB_TABLE_NAME_BLOG)->where(DBValues::DB_TABLE_BLOG_AUTHOR, DBValues::DB_OPERATOR_EQUAL_TO, $author_id_from_people_table[0]->{'uid'})->select([DBValues::DB_OPERATOR_SELECT_ALL])->limit($limit)->offset($offset)->get());
     }
 
+    public function get_blog_for_tag_paginated($tag, $limit, $offset)
+    {
+        return response()->json(DB::table(DBValues::DB_TABLE_NAME_BLOG)->where(DBValues::DB_TABLE_BLOG_TAGS, DBValues::DB_OPERATOR_LIKE, DBValues::DB_OPERATOR_LIKE_PERCENTAGE . $tag . DBValues::DB_OPERATOR_LIKE_PERCENTAGE)->select([DBValues::DB_OPERATOR_SELECT_ALL])->limit($limit)->offset($offset)->get());
+    }
 
-//    BLOG STUFF
+//    BLOG CRUD AND FUNCTIONALITY
 
 
     public function add_post($json)
@@ -65,9 +69,7 @@ class BlogCalls
         $blog_json = json_decode($json);
 
         $author_uid = DB::table(DBValues::DB_TABLE_NAME_PEOPLE)
-//                        ->join('organization', DBValues::DB_TABLE_NAME_PEOPLE . DBValues::DB_OPERATOR_DOT . DBValues::DB_TABLE_PEOPLE_ORGANISATION_ID, DBValues::DB_OPERATOR_EQUAL_TO, 'organization.uid')
             ->where(DBValues::DB_TABLE_PEOPLE_FIRST_NAME, DBValues::DB_OPERATOR_EQUAL_TO, $blog_json->{'author'})
-//                        ->orWhere('organization.name', DBValues::DB_OPERATOR_EQUAL_TO, $blog_json->{'author'})
             ->select(DBValues::DB_TABLE_PEOPLE_UID)
             ->get();
 
