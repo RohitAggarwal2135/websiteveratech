@@ -4,18 +4,23 @@ namespace App\Http\Controllers;
 
 header("Access-Control-Allow-Origin: *");
 
-use App\Constants\ConstantValues;
+use App\Http\Requests\AllRequest;
+use App\Http\Requests\GetForAuthorRequest;
+use App\Http\Requests\GetForCategoryRequest;
+use App\Http\Requests\GetForTagRequest;
+use App\Http\Requests\PopulateRequest;
+use App\Http\Requests\PostAddRequest;
+use App\Http\Requests\SuggestedRequest;
+use App\Http\Requests\UniqueRequest;
 use App\Services\Blog\BlogCalls;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
 
 class BlogsController extends Controller
 {
 
 //    APIs
-
     public function index(Request $request)
     {
         return view('posts.create');
@@ -38,15 +43,9 @@ class BlogsController extends Controller
         return $category->categories($request);
     }
 
-    public function suggested_blog(Request $request)
+    public function suggested_blog(SuggestedRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            ConstantValues::FIELD_NAME_LIMIT => ConstantValues::FIELD_NAME_REQUIRED . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_INTEGER . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_BETWEEN . ConstantValues::FIELD_NAME_OPERATOR_COLON . ConstantValues::FIELD_NAME_LIMIT_RANGE,
-            ConstantValues::FIELD_NAME_ID => ConstantValues::FIELD_NAME_REQUIRED,
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 200);
-        }
+        $validator = $request->validated();
 
         $data = $request->all();
         $id = $data['id'];
@@ -56,15 +55,9 @@ class BlogsController extends Controller
         return $suggested_blog->suggested_blog($id, $limit);
     }
 
-    public function all_blogs_paginated(Request $request)
+    public function all_blogs_paginated(AllRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            ConstantValues::FIELD_NAME_LIMIT => ConstantValues::FIELD_NAME_REQUIRED . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_INTEGER . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_BETWEEN . ConstantValues::FIELD_NAME_OPERATOR_COLON . ConstantValues::FIELD_NAME_LIMIT_RANGE,
-            ConstantValues::FIELD_NAME_OFFSET => ConstantValues::FIELD_NAME_REQUIRED . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_INTEGER,
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 200);
-        }
+        $validator = $request->validated();
 
         $data = $request->all();
         $limit = $data['limit'];
@@ -74,14 +67,9 @@ class BlogsController extends Controller
         return $all_blogs_paginated->all_blogs_paginated($limit, $offset);
     }
 
-    public function unique_blog(Request $request)
+    public function unique_blog(UniqueRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            ConstantValues::FIELD_NAME_ID => ConstantValues::FIELD_NAME_REQUIRED
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 200);
-        }
+        $validator = $request->validated();
 
         $uid_json = json_encode($request->all());
         $uid = json_decode($uid_json)->{'id'};
@@ -90,16 +78,9 @@ class BlogsController extends Controller
         return $unique_blog->unique_blog($uid);
     }
 
-    public function get_blog_for_category(Request $request)
+    public function get_blog_for_category(GetForCategoryRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            ConstantValues::FIELD_NAME_CATEGORY => ConstantValues::FIELD_NAME_REQUIRED,
-            ConstantValues::FIELD_NAME_LIMIT => ConstantValues::FIELD_NAME_REQUIRED . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_INTEGER . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_BETWEEN . ConstantValues::FIELD_NAME_OPERATOR_COLON . ConstantValues::FIELD_NAME_LIMIT_RANGE,
-            ConstantValues::FIELD_NAME_OFFSET => ConstantValues::FIELD_NAME_REQUIRED . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_INTEGER,
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 200);
-        }
+        $validator = $request->validated();
 
         $provided_data = $request->all();
         $category = $provided_data['category'];
@@ -110,16 +91,9 @@ class BlogsController extends Controller
         return $get_blog_for_category_paginated->get_blog_for_category_paginated($category, $limit, $offset);
     }
 
-    public function get_blog_for_author(Request $request)
+    public function get_blog_for_author(GetForAuthorRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            ConstantValues::FIELD_NAME_AUTHOR => ConstantValues::FIELD_NAME_REQUIRED,
-            ConstantValues::FIELD_NAME_LIMIT => ConstantValues::FIELD_NAME_REQUIRED . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_INTEGER . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_BETWEEN . ConstantValues::FIELD_NAME_OPERATOR_COLON . ConstantValues::FIELD_NAME_LIMIT_RANGE,
-            ConstantValues::FIELD_NAME_OFFSET => ConstantValues::FIELD_NAME_REQUIRED . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_INTEGER,
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 200);
-        }
+        $validator = $request->validated();
 
         $provided_data = $request->all();
         $author_name = $provided_data['author'];
@@ -130,16 +104,9 @@ class BlogsController extends Controller
         return $get_blog_for_author_paginated->get_blog_for_author_paginated($author_name, $limit, $offset);
     }
 
-    public function get_blog_for_tags(Request $request)
+    public function get_blog_for_tags(GetForTagRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            ConstantValues::FIELD_NAME_TAG => ConstantValues::FIELD_NAME_REQUIRED,
-            ConstantValues::FIELD_NAME_LIMIT => ConstantValues::FIELD_NAME_REQUIRED . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_INTEGER . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_BETWEEN . ConstantValues::FIELD_NAME_OPERATOR_COLON . ConstantValues::FIELD_NAME_LIMIT_RANGE,
-            ConstantValues::FIELD_NAME_OFFSET => ConstantValues::FIELD_NAME_REQUIRED . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_INTEGER,
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 200);
-        }
+        $validator = $request->validated();
 
         $provided_data = $request->all();
         $tag = $provided_data['tag'];
@@ -154,46 +121,18 @@ class BlogsController extends Controller
 //    BLOG CRUD AND FUNCTIONALITY
 
 
-    public function postsadd(Request $request)
+    public function postsadd(PostAddRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            ConstantValues::FIELD_NAME_TITLE => ConstantValues::FIELD_NAME_REQUIRED,
-            ConstantValues::FIELD_NAME_AUTHOR => ConstantValues::FIELD_NAME_REQUIRED,
-
-        ]);
-        if ($validator->fails()) {
-            $validation_failed_response = $validator->messages();
-            $title_response_boolean = isset(json_decode(json_encode($validation_failed_response), true)['title']);
-            $author_response_boolean = isset(json_decode(json_encode($validation_failed_response), true)['author']);
-
-            if (!$title_response_boolean && $author_response_boolean) {
-//                print_r(get_class($validation_failed_response));
-                $validation_failed_response->add('title', $request->all()['title']);
-            }
-
-            if ($title_response_boolean && !$author_response_boolean) {
-//                print_r(get_class($validation_failed_response));
-                $validation_failed_response->add('author', $request->all()['author']);
-            }
-
-            return response()->json($validation_failed_response, 200);
-        }
+        $validator = $request->validated();
 
         $blog_json = json_encode($request->all());
         $add_post = new BlogCalls();
         return $add_post->add_post($blog_json);
     }
 
-    public function populate_blog(Request $request)
+    public function populate_blog(PopulateRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            ConstantValues::FIELD_NAME_UID => ConstantValues::FIELD_NAME_REQUIRED,
-
-        ]);
-        if ($validator->fails()) {
-            $validation_failed_response = $validator->messages();
-            return response()->json($validation_failed_response, 200);
-        }
+        $validator = $request->validated();
 
         $uid_json = json_encode($request->all());
         $uid = json_decode($uid_json)->{'uid'};

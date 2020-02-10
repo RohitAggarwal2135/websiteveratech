@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Constants\ConstantValues;
 use App\Http\Requests\AllRequest;
+use App\Http\Requests\GetForAuthorRequest;
+use App\Http\Requests\GetForCategoryRequest;
+use App\Http\Requests\GetForTagRequest;
 use App\Http\Requests\SuggestedRequest;
+use App\Http\Requests\UniqueRequest;
 use App\Services\Media\MediaCalls;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Validator;
 
 class MediaController extends Controller
 {
@@ -18,15 +20,9 @@ class MediaController extends Controller
         return $top_story->top_story($request);
     }
 
-    public function suggested_story(Request $request)
+    public function suggested_story(SuggestedRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            ConstantValues::FIELD_NAME_ID => ConstantValues::FIELD_NAME_REQUIRED,
-            ConstantValues::FIELD_NAME_LIMIT => ConstantValues::FIELD_NAME_REQUIRED . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_INTEGER . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_BETWEEN . ConstantValues::FIELD_NAME_OPERATOR_COLON . ConstantValues::FIELD_NAME_LIMIT_RANGE,
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 200);
-        }
+        $validator = $request->validated();
 
         $data = $request->all();
         $id = $data['id'];
@@ -36,15 +32,9 @@ class MediaController extends Controller
         return $suggested_story->get_suggested_story($id, $limit);
     }
 
-    public function all_media_paginated(Request $request)
+    public function all_media_paginated(AllRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            ConstantValues::FIELD_NAME_LIMIT => ConstantValues::FIELD_NAME_REQUIRED . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_INTEGER . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_BETWEEN . ConstantValues::FIELD_NAME_OPERATOR_COLON . ConstantValues::FIELD_NAME_LIMIT_RANGE,
-            ConstantValues::FIELD_NAME_OFFSET => ConstantValues::FIELD_NAME_REQUIRED . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_INTEGER,
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 200);
-        }
+        $validator = $request->validated();
 
         $data = $request->all();
         $limit = $data['limit'];
@@ -54,14 +44,9 @@ class MediaController extends Controller
         return $all_blogs_paginated->all_media_paginated($limit, $offset);
     }
 
-    public function unique_media(Request $request)
+    public function unique_media(UniqueRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            ConstantValues::FIELD_NAME_ID => ConstantValues::FIELD_NAME_REQUIRED,
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 200);
-        }
+        $validator = $request->validated();
 
         $uid = $request->all()['id'];
 
@@ -69,16 +54,9 @@ class MediaController extends Controller
         return $unique_story->get_unique_story($uid);
     }
 
-    public function get_story_for_category(Request $request)
+    public function get_story_for_category(GetForCategoryRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            ConstantValues::FIELD_NAME_CATEGORY => ConstantValues::FIELD_NAME_REQUIRED,
-            ConstantValues::FIELD_NAME_LIMIT => ConstantValues::FIELD_NAME_REQUIRED . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_INTEGER . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_BETWEEN . ConstantValues::FIELD_NAME_OPERATOR_COLON . ConstantValues::FIELD_NAME_LIMIT_RANGE,
-            ConstantValues::FIELD_NAME_OFFSET => ConstantValues::FIELD_NAME_REQUIRED . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_INTEGER,
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 200);
-        }
+        $validator = $request->validated();
 
         $provided_data = $request->all();
         $category = $provided_data['category'];
@@ -89,16 +67,9 @@ class MediaController extends Controller
         return $get_story_for_category_paginated->get_story_for_category_paginated($category, $limit, $offset);
     }
 
-    public function get_story_for_author(Request $request)
+    public function get_story_for_author(GetForAuthorRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            ConstantValues::FIELD_NAME_AUTHOR => ConstantValues::FIELD_NAME_REQUIRED,
-            ConstantValues::FIELD_NAME_LIMIT => ConstantValues::FIELD_NAME_REQUIRED . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_INTEGER . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_BETWEEN . ConstantValues::FIELD_NAME_OPERATOR_COLON . ConstantValues::FIELD_NAME_LIMIT_RANGE,
-            ConstantValues::FIELD_NAME_OFFSET => ConstantValues::FIELD_NAME_REQUIRED . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_INTEGER,
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 200);
-        }
+        $validator = $request->validated();
 
         $provided_data = $request->all();
         $author_name = $provided_data['author'];
@@ -109,16 +80,9 @@ class MediaController extends Controller
         return $get_story_for_author_paginated->get_story_for_author_paginated($author_name, $limit, $offset);
     }
 
-    public function get_story_for_tags(Request $request)
+    public function get_story_for_tags(GetForTagRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            ConstantValues::FIELD_NAME_TAG => ConstantValues::FIELD_NAME_REQUIRED,
-            ConstantValues::FIELD_NAME_LIMIT => ConstantValues::FIELD_NAME_REQUIRED . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_INTEGER . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_BETWEEN . ConstantValues::FIELD_NAME_OPERATOR_COLON . ConstantValues::FIELD_NAME_LIMIT_RANGE,
-            ConstantValues::FIELD_NAME_OFFSET => ConstantValues::FIELD_NAME_REQUIRED . ConstantValues::FIELD_NAME_OPERATOR_VERTICAL_BAR . ConstantValues::FIELD_NAME_INTEGER,
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->messages(), 200);
-        }
+        $validator = $request->validated();
 
         $provided_data = $request->all();
         $tag = $provided_data['tag'];
