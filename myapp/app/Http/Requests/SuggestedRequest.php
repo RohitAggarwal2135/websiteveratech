@@ -1,5 +1,10 @@
 <?php
 
+/*
+ * Created by PhpStorm
+ * User: Raman Mehta
+ */
+
 namespace App\Http\Requests;
 
 use App\Constants\ConstantValues;
@@ -21,6 +26,11 @@ class SuggestedRequest extends FormRequest
      * Get the validation rules that apply to the request.
      *
      * @return array
+     */
+
+    /*
+     * limit => required|integer|between 1,10
+     * id => required
      */
     public function rules()
     {

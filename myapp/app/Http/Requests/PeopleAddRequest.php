@@ -1,5 +1,10 @@
 <?php
 
+/*
+ * Created by PhpStorm
+ * User: Raman Mehta
+ */
+
 namespace App\Http\Requests;
 header("Access-Control-Allow-Origin: *");
 
@@ -22,6 +27,10 @@ class PeopleAddRequest extends FormRequest
      * Get the validation rules that apply to the request.
      *
      * @return array
+     */
+    /*
+     * name => required
+     * organisation => required
      */
     public function rules()
     {

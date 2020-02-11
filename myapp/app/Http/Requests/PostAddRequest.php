@@ -1,5 +1,10 @@
 <?php
 
+/*
+ * Created by PhpStorm
+ * User: Raman Mehta
+ */
+
 namespace App\Http\Requests;
 
 use App\Constants\ConstantValues;
@@ -21,6 +26,11 @@ class PostAddRequest extends FormRequest
      * Get the validation rules that apply to the request.
      *
      * @return array
+     */
+
+    /*
+     * title => required
+     * author => required
      */
     public function rules()
     {

@@ -1,5 +1,10 @@
 <?php
 
+/*
+ * Created by PhpStorm
+ * User: Raman Mehta
+ */
+
 namespace App\Http\Requests;
 
 use App\Constants\ConstantValues;
@@ -21,6 +26,11 @@ class GetForTagRequest extends FormRequest
      * Get the validation rules that apply to the request.
      *
      * @return array
+     */
+    /*
+     * tag => required
+     * limit => required|integer|between 1,10
+     * offset => required|integer
      */
     public function rules()
     {

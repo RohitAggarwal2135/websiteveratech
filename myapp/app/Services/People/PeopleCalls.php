@@ -1,7 +1,15 @@
 <?php
 
+/*
+ * Created by PhpStorm
+ * User: Raman Mehta
+ */
+
 namespace App\Services\People;
-header("Access-Control-Allow-Origin: *");
+
+use App\Constants\ConstantValues;
+
+header(ConstantValues::HEADER_NAME_CORS . ConstantValues::FIELD_NAME_OPERATOR_COLON . ConstantValues::HEADER_VALUE_ALL_OPERATOR);
 
 use App\Constants\DBValues;
 use Illuminate\Http\Request;
@@ -10,6 +18,14 @@ use Illuminate\Support\Str;
 
 class PeopleCalls
 {
+    /*
+     * The 'people_add' function gets a json object with the form data of the add_people HTML Page.
+     * It gets the organisation uid from organization table first.
+     * corresponding to that the people is added with the organisation uid in the people table.
+     * if the uid is provided in the form data, then the form data is
+     * correspondingly gets updated in the table instead of new entry.
+     * Returns "Unknown Organisation" if the organisation provided doesn't exists already.
+     */
     public function people_add($json)
     {
         $people_json = json_decode($json);
@@ -38,6 +54,11 @@ class PeopleCalls
         }
     }
 
+    /*
+     * The 'people_populate' function gets uid.
+     * It returns the people table data corresponding to the provided uid.
+     * Returns "Wrong uid" if the uid provided doesn't exists in the people table.
+     */
     public function people_populate($uid)
     {
         $data_response = DB::table(DBValues::DB_TABLE_NAME_PEOPLE)
@@ -47,12 +68,18 @@ class PeopleCalls
             ->get();
 
         if (count($data_response) == 0) {
-            return response()->json("Wrong uid",500);
+            return response()->json("Wrong uid", 500);
         }
         return response()->json($data_response, 200);
     }
 
-    public function organization_names_from_people_table(Request $request)
+    /*
+     * The 'organization_names_from_organization_table' function returns json object
+     * having "name" as key value and value as the organization names.
+     * It's used in the EasyAutoComplete DropDown to show the organizations present
+     * in the organization's table corresponding to the provided query in the input field.
+     */
+    public function organization_names_from_organization_table(Request $request)
     {
         $json_organization_names = [];
         $query = $request->get('phrase');

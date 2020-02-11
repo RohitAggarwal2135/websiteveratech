@@ -1,11 +1,11 @@
 <?php
 
+/*
+ * Created by PhpStorm
+ * User: Raman Mehta
+ */
+
 use Illuminate\Support\Facades\Route;
-
-Route::get('posts', 'BlogsController@index');
-
-Route::resource('blog', 'PostsController');
-
 
 //APIs
 

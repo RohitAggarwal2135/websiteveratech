@@ -1,5 +1,10 @@
 <?php
 
+/*
+ * Created by PhpStorm
+ * User: Raman Mehta
+ */
+
 namespace App\Http\Requests;
 
 use App\Constants\ConstantValues;
@@ -21,6 +26,10 @@ class OrganisationAddRequest extends FormRequest
      * Get the validation rules that apply to the request.
      *
      * @return array
+     */
+    /*
+     * Name => required
+     * Category => required
      */
     public function rules()
     {
