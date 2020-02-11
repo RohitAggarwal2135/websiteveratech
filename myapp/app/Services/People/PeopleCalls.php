@@ -1,9 +1,8 @@
 <?php
 
 namespace App\Services\People;
-header("Access-Control-Allow-Origin : *");
+header("Access-Control-Allow-Origin: *");
 
-use App\Constants\ConstantValues;
 use App\Constants\DBValues;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -30,12 +29,12 @@ class PeopleCalls
                     ->insert([DBValues::DB_TABLE_PEOPLE_UID => Str::random(10), DBValues::DB_TABLE_PEOPLE_FIRST_NAME => $people_json->{'first_name'}, DBValues::DB_TABLE_PEOPLE_LAST_NAME => $people_json->{'last_name'}, DBValues::DB_TABLE_PEOPLE_ORGANISATION_ID => $organization_uid, DBValues::DB_TABLE_PEOPLE_DESIGNATION => $people_json->{'designation'}, DBValues::DB_TABLE_PEOPLE_LOCATION => $people_json->{'location'}, DBValues::DB_TABLE_PEOPLE_ABOUT => $people_json->{'about'}, DBValues::DB_TABLE_PEOPLE_URL_LINKEDIN => $people_json->{'url_linkedin'}, DBValues::DB_TABLE_PEOPLE_URL_FACEBOOK => $people_json->{'url_facebook'}, DBValues::DB_TABLE_PEOPLE_URL_TWITTER => $people_json->{'url_twitter'}, DBValues::DB_TABLE_PEOPLE_URL_GITHUB => $people_json->{'url_github'}, DBValues::DB_TABLE_PEOPLE_EMAIL => $people_json->{'email'}, DBValues::DB_TABLE_PEOPLE_PHONE => $people_json->{'phone'}, DBValues::DB_TABLE_PEOPLE_CATEGORY => $people_json->{'category'}, DBValues::DB_TABLE_PEOPLE_URL_PROFILE_PIC => $people_json->{'url_profile_pic'}, DBValues::DB_TABLE_PEOPLE_PRIORITY => $people_json->{'priority'}]);
             }
             if ($insert) {
-                return response()->json("SUCCESS", 200)->header(ConstantValues::HEADER_NAME_CORS, ConstantValues::HEADER_VALUE_ALL_OPERATOR);
+                return response()->json("SUCCESS", 200);
             } else {
-                return response()->json("FAILED", 500)->header(ConstantValues::HEADER_NAME_CORS, ConstantValues::HEADER_VALUE_ALL_OPERATOR);
+                return response()->json("FAILED", 500);
             }
         } else {
-            return response()->json("Unknown Organisation", 200)->header(ConstantValues::HEADER_NAME_CORS, ConstantValues::HEADER_VALUE_ALL_OPERATOR);
+            return response()->json("Unknown Organisation", 500);
         }
     }
 
@@ -48,9 +47,9 @@ class PeopleCalls
             ->get();
 
         if (count($data_response) == 0) {
-            return response()->json("Wrong uid")->header(ConstantValues::HEADER_NAME_CORS, ConstantValues::HEADER_VALUE_ALL_OPERATOR);
+            return response()->json("Wrong uid",500);
         }
-        return response()->json($data_response, 200)->header(ConstantValues::HEADER_NAME_CORS, ConstantValues::HEADER_VALUE_ALL_OPERATOR);
+        return response()->json($data_response, 200);
     }
 
     public function organization_names_from_people_table(Request $request)
@@ -71,6 +70,6 @@ class PeopleCalls
         for ($index = 0; $index < count($data); $index++) {
             $json_organization_names[$index] = $data[$index];
         }
-        return response()->json($json_organization_names)->header(ConstantValues::HEADER_NAME_CORS, ConstantValues::HEADER_VALUE_ALL_OPERATOR);
+        return response()->json($json_organization_names);
     }
 }

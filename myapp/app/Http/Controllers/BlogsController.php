@@ -15,7 +15,6 @@ use App\Http\Requests\UniqueRequest;
 use App\Services\Blog\BlogCalls;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\MessageBag;
 
 class BlogsController extends Controller
 {

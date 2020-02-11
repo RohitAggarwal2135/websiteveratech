@@ -39,10 +39,6 @@ Route::post('getblogfortags', 'BlogsController@get_blog_for_tags');
 
 Route::post('getstoryfortags', 'MediaController@get_story_for_tags');
 
-//Route::post('getblogfororganisation', 'MediaController@get_blog_for_organisation');
-//
-//Route::post('getstoryfororganisation', 'MediaController@get_story_for_organisation');
-
 
 //BLOG CRUD AND FUNCTIONALITY
 

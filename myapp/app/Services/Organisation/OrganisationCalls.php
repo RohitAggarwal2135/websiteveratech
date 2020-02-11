@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Services\Organisation;
-header("Access-Control-Allow-Origin : *");
+header("Access-Control-Allow-Origin: *");
 
 use App\Constants\ConstantValues;
 use App\Constants\DBValues;
@@ -30,9 +30,9 @@ class OrganisationCalls
                 ->insert([DBValues::DB_TABLE_PEOPLE_UID => Str::random(10),DBValues::DB_TABLE_PEOPLE_FIRST_NAME => $organisation_json->{'name'}, DBValues::DB_TABLE_PEOPLE_ORGANISATION_ID => $random_organisation_uid, DBValues::DB_TABLE_PEOPLE_DESIGNATION => ConstantValues::FIELD_NAME_DEFAULT_USER_DESIGNATION, DBValues::DB_TABLE_PEOPLE_ABOUT => $organisation_json->{'description'}, DBValues::DB_TABLE_PEOPLE_URL_LINKEDIN => $organisation_json->{'url_linkedin'}, DBValues::DB_TABLE_PEOPLE_URL_FACEBOOK => $organisation_json->{'url_facebook'}, DBValues::DB_TABLE_PEOPLE_URL_TWITTER => $organisation_json->{'url_twitter'}, DBValues::DB_TABLE_PEOPLE_URL_GITHUB => $organisation_json->{'url_github'}, DBValues::DB_TABLE_PEOPLE_CATEGORY => $organisation_json->{'category'}, DBValues::DB_TABLE_PEOPLE_URL_PROFILE_PIC => $organisation_json->{'url_logo_color'}]);
         }
         if ($insert && $insert_default_people) {
-            return response()->json("SUCCESS", 200)->header(ConstantValues::HEADER_NAME_CORS, ConstantValues::HEADER_VALUE_ALL_OPERATOR);
+            return response()->json("SUCCESS", 200);
         } else {
-            return response()->json("FAILED", 500)->header(ConstantValues::HEADER_NAME_CORS, ConstantValues::HEADER_VALUE_ALL_OPERATOR);
+            return response()->json("FAILED", 500);
         }
     }
 
@@ -44,8 +44,8 @@ class OrganisationCalls
             ->get();
 
         if (count($data_response) == 0) {
-            return response()->json("Wrong uid")->header(ConstantValues::HEADER_NAME_CORS, ConstantValues::HEADER_VALUE_ALL_OPERATOR);
+            return response()->json("Wrong uid",500);
         }
-        return response()->json($data_response, 200)->header(ConstantValues::HEADER_NAME_CORS, ConstantValues::HEADER_VALUE_ALL_OPERATOR);
+        return response()->json($data_response, 200);
     }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Constants\ConstantValues;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PostAddRequest extends FormRequest
+class OrganisationAddRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,8 +25,8 @@ class PostAddRequest extends FormRequest
     public function rules()
     {
         return [
-            ConstantValues::FIELD_NAME_TITLE => ConstantValues::FIELD_NAME_REQUIRED,
-            ConstantValues::FIELD_NAME_AUTHOR => ConstantValues::FIELD_NAME_REQUIRED,
+            ConstantValues::FIELD_NAME_NAME => ConstantValues::FIELD_NAME_REQUIRED,
+            ConstantValues::FIELD_NAME_CATEGORY => ConstantValues::FIELD_NAME_REQUIRED
         ];
     }
 }

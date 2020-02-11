@@ -89,7 +89,7 @@ class BlogCalls
                 return response()->json("FAILED", 500);
             }
         } else {
-            return response()->json("Unknown User", 200);
+            return response()->json("Unknown User", 500);
         }
     }
 
@@ -102,7 +102,7 @@ class BlogCalls
             ->get();
 
         if (count($data_response) == 0) {
-            return response()->json("Wrong uid");
+            return response()->json("Wrong uid",500);
         }
         return response()->json($data_response, 200);
     }
